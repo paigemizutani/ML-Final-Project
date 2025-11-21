@@ -1,222 +1,191 @@
-# ----------------------------------------------------------
-# model.py — BERT for MBTI Personality Classification
-# Supports BOTH Toy Dataset and Kaggle Dataset
-# ----------------------------------------------------------
-
-# REQUIREMENTS:
-# pip install kagglehub[pandas-datasets]
-# pip install transformers datasets torch scikit-learn
-
-import os
 import pandas as pd
-import kagglehub
-from sklearn.preprocessing import LabelEncoder
-from sklearn.model_selection import train_test_split
-
-from datasets import Dataset
-from transformers import (
-    BertTokenizer,
-    BertForSequenceClassification,
-    TrainingArguments,
-    Trainer
-)
 import torch
+from torch.utils.data import DataLoader, TensorDataset
+from transformers import BertTokenizer, BertForSequenceClassification
+from torch.optim import AdamW
+from sklearn.model_selection import train_test_split
+from sklearn.utils.class_weight import compute_class_weight
+import numpy as np 
+import matplotlib.pyplot as plt
+from sklearn.metrics import accuracy_score, precision_recall_curve, average_precision_score
+
+NUM_EPOCHS = 3
+MAX_LEN = 128
+BATCH_SIZE = 16
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+MODEL_NAME = "prajjwal1/bert-tiny"
+
+# LOAD DATA
+df = pd.read_csv("data/reddit_post.csv")
+df = df[['mbti', 'body']].dropna().astype(str)
+
+df = df.sample(n=7000, random_state=42)
 
 
-# ==========================================================
-# 0. CONFIGURATION SWITCH
-# ==========================================================
-USE_TOY_DATA = True   # ← Toggle to False to use Kaggle dataset
+# CREATE MBTI DIMENSIONS
+df['E_I'] = df['mbti'].apply(lambda x: 0 if x[0] == 'I' else 1)
+df['S_N'] = df['mbti'].apply(lambda x: 0 if x[1] == 'S' else 1)
+df['T_F'] = df['mbti'].apply(lambda x: 0 if x[2] == 'T' else 1)
+df['J_P'] = df['mbti'].apply(lambda x: 0 if x[3] == 'J' else 1)
 
 
-# ==========================================================
-# 1. TOY DATASET (FAST DEVELOPMENT)
-# ==========================================================
-def load_toy_dataset():
-    print("\n⚡ Using TOY DATASET (fast prototyping)...")
+# TOKENIZATION
+tokenizer = BertTokenizer.from_pretrained(MODEL_NAME)
 
-    data = {
-        "type": ["INTJ", "ENFP", "ISTP", "INFP", "ENTJ", "INTP"],
-        "posts": [
-            "I love thinking about abstract theories.",
-            "I enjoy meeting new people and being spontaneous!",
-            "I prefer hands-on problem solving.",
-            "I write poetry and reflect deeply about life.",
-            "I like leading teams and making decisions.",
-            "I analyze systems logically for fun."
-        ]
-    }
-
-    df = pd.DataFrame(data)
-    print(df)
-    return df
-
-
-# ==========================================================
-# 2. KAGGLE DATASET LOADING
-# ==========================================================
-def load_kaggle_dataset():
-    print("\n⬇️ Downloading dataset from Kaggle (requires API auth)...")
-
-    dataset_handle = "minhaozhang1/reddit-mbti-dataset"
-
-    dataset_path = kagglehub.dataset_download(dataset_handle)
-    print("Dataset downloaded to:", dataset_path)
-
-    # List files
-    files = os.listdir(dataset_path)
-    print("Files:", files)
-
-    # Find CSV file
-    csv_files = [f for f in files if f.endswith(".csv")]
-    if not csv_files:
-        raise ValueError("❌ No CSV file found in Kaggle dataset!")
-    csv_filename = csv_files[0]
-
-    print("Loading:", csv_filename)
-
-    df = kagglehub.load_dataset(dataset_handle, path=csv_filename)
-
-    print("\nSample data:")
-    print(df.head())
-    return df
-
-
-# ==========================================================
-# 3. MAIN LOADING LOGIC
-# ==========================================================
-if USE_TOY_DATA:
-    df = load_toy_dataset()
-else:
-    df = load_kaggle_dataset()
-
-
-# ==========================================================
-# 4. PREPROCESSING
-# ==========================================================
-expected_columns = ["type", "posts"]
-if not all(col in df.columns for col in expected_columns):
-    raise ValueError(f"Dataset must contain: {expected_columns}")
-
-# Encode MBTI types → integers 0–15
-le = LabelEncoder()
-df["label"] = le.fit_transform(df["type"])
-
-# Train-test split
-train_texts, test_texts, y_train, y_test = train_test_split(
-    df["posts"].tolist(),
-    df["label"].tolist(),
-    test_size=0.2,
-    random_state=42
-)
-
-print("\n📊 Data split:")
-print("Train samples:", len(train_texts))
-print("Test samples:", len(test_texts))
-
-
-# ==========================================================
-# 5. TOKENIZATION (BERT)
-# ==========================================================
-tokenizer = BertTokenizer.from_pretrained("bert-base-uncased")
-
-def tokenize(batch):
+def encode(texts):
     return tokenizer(
-        batch["text"],
+        texts.tolist(),
         padding="max_length",
         truncation=True,
-        max_length=128
+        max_length=MAX_LEN,
+        return_tensors="pt"
     )
 
-# Create HuggingFace datasets
-train_ds = Dataset.from_dict({"text": train_texts, "label": y_train})
-test_ds = Dataset.from_dict({"text": test_texts, "label": y_test})
 
-train_ds = train_ds.map(tokenize, batched=True)
-test_ds = test_ds.map(tokenize, batched=True)
-
-train_ds = train_ds.remove_columns(["text"])
-test_ds = test_ds.remove_columns(["text"])
-
-train_ds.set_format("torch")
-test_ds.set_format("torch")
-
-
-# ==========================================================
-# 6. BERT MODEL SETUP
-# ==========================================================
-num_classes = len(df["type"].unique())
-
-model = BertForSequenceClassification.from_pretrained(
-    "bert-base-uncased",
-    num_labels=num_classes
+# TRAIN/TEST SPLIT
+train_texts, test_texts, train_labels, test_labels = train_test_split(
+    df['body'], df[['E_I','S_N','T_F','J_P']], test_size=0.2, random_state=42
 )
 
+train_encodings = encode(train_texts)
+test_encodings = encode(test_texts)
 
-# ==========================================================
-# 7. TRAINING CONFIG
-# ==========================================================
-training_args = TrainingArguments(
-    output_dir="./bert-mbti",
-    evaluation_strategy="epoch",
-    save_strategy="epoch",
-    learning_rate=2e-5,
-    per_device_train_batch_size=4 if USE_TOY_DATA else 8,
-    per_device_eval_batch_size=4 if USE_TOY_DATA else 8,
-    num_train_epochs=3,
-    weight_decay=0.01,
-    logging_steps=10,
+train_dataset = TensorDataset(
+    train_encodings['input_ids'], train_encodings['attention_mask'],
+    torch.tensor(train_labels.values, dtype=torch.long)
 )
 
-trainer = Trainer(
-    model=model,
-    args=training_args,
-    train_dataset=train_ds,
-    eval_dataset=test_ds
+test_dataset = TensorDataset(
+    test_encodings['input_ids'], test_encodings['attention_mask'],
+    torch.tensor(test_labels.values, dtype=torch.long)
 )
 
-print("\n🚀 Starting training...")
-trainer.train()
+train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True)
+test_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE)
 
 
-# ==========================================================
-# 8. EVALUATION
-# ==========================================================
-print("\n📈 Evaluation Results:")
-print(trainer.evaluate())
-
-
-# ==========================================================
-# 9. SAVE MODEL
-# ==========================================================
-model_dir = "./bert-mbti-model"
-os.makedirs(model_dir, exist_ok=True)
-model.save_pretrained(model_dir)
-tokenizer.save_pretrained(model_dir)
-
-print(f"\n💾 Model saved to: {model_dir}")
-
-
-# ==========================================================
-# 10. PREDICTION FUNCTION
-# ==========================================================
-def predict_mbti(text):
+# EVALUATE + PLOT PRECISION RECALL
+def eval_and_plot(model, test_loader, dim_index):
     model.eval()
-    inputs = tokenizer(
-        text,
-        return_tensors="pt",
-        padding=True,
-        truncation=True,
-        max_length=128
-    )
+    y_true, y_prob = [], []
+
     with torch.no_grad():
-        outputs = model(**inputs)
-    pred = torch.argmax(outputs.logits, dim=1).item()
-    return le.inverse_transform([pred])[0]
+        for input_ids, attention_mask, labels in test_loader:
+
+            # pick the correct column for this MBTI dimension
+            y = labels[:, dim_index]
+
+            # forward pass
+            outputs = model(
+                input_ids=input_ids.to(DEVICE),
+                attention_mask=attention_mask.to(DEVICE)
+            )
+            logits = outputs.logits
+
+            probs = torch.softmax(logits, dim=1)[:, 1].cpu().numpy()
+
+            y_true.extend(y.cpu().numpy())
+            y_prob.extend(probs)
+
+    y_true = np.array(y_true)
+    y_prob = np.array(y_prob)
+    y_pred = (y_prob >= 0.5).astype(int)
+
+    acc = accuracy_score(y_true, y_pred)
+    pr_auc = average_precision_score(y_true, y_prob)
+
+    print(f"Accuracy: {acc:.4f}")
+    print(f"PR AUC:  {pr_auc:.4f}")
+
+    precision, recall, _ = precision_recall_curve(y_true, y_prob)
+    plt.figure()
+    plt.plot(recall, precision)
+    plt.xlabel("Recall")
+    plt.ylabel("Precision")
+    plt.title(f"Precision–Recall Curve {dim_index} (AUC = {pr_auc:.3f})")
+    plt.savefig(f"pr_curve_{dim_index}.png", dpi=300)
+    plt.close()
 
 
-# Example
-example = "I love brainstorming and exploring new ideas."
-print("\nExample prediction:")
-print("Text:", example)
-print("Predicted MBTI:", predict_mbti(example))
+# TRAIN MODELS PER DIMENSION
+dimensions = ['E_I','S_N','T_F','J_P']
+dim_map = {"E_I": ["I","E"], "S_N": ["S","N"], "T_F": ["T","F"], "J_P": ["J","P"]}
+trained_models = {}
+
+# COMPUTE CLASS WEIGHTS
+class_weights = {}
+for dim in dimensions:
+    weights = compute_class_weight(
+        class_weight="balanced",
+        classes=np.array([0, 1]), 
+        y=train_labels[dim] 
+    )
+
+    class_weights[dim] = torch.tensor(weights, dtype=torch.float).to(DEVICE)
+
+
+for i, dim in enumerate(dimensions):
+    print(f"\nTraining model for {dim}...")
+    model = BertForSequenceClassification.from_pretrained(MODEL_NAME, num_labels=2).to(DEVICE)
+    optimizer = AdamW(model.parameters(), lr=5e-5)
+
+    model.train()
+    for epoch in range(NUM_EPOCHS):
+        for batch in train_loader:
+            optimizer.zero_grad()
+            input_ids = batch[0].to(DEVICE)
+            attention_mask = batch[1].to(DEVICE)
+            labels = batch[2][:,i].to(DEVICE)
+
+            outputs = model(input_ids=input_ids, attention_mask=attention_mask)
+
+            loss_fct = torch.nn.CrossEntropyLoss(weight=class_weights[dim])
+            loss = loss_fct(outputs.logits, labels)
+
+            loss.backward()
+            optimizer.step()
+        print(f"Epoch {epoch+1} done, Loss: {loss.item():.4f}")
+    print("\nEvaluating model...")
+    eval_and_plot(model, test_loader, i)
+    trained_models[dim] = model
+
+
+# PREDICT NEW POSTS
+new_posts = [
+    "Ok ya not sure if this model is actually predicting anything",
+    "I love leading teams and planning long-term goals.",
+    "I really enjoy spending time alone thinking about ideas.",
+    "whatever this is sooo annoying",
+    "Wait Im actually so excited for thiss"
+]
+
+encoded = tokenizer(
+    new_posts,
+    padding="max_length",
+    truncation=True,
+    max_length=MAX_LEN,
+    return_tensors="pt"
+)
+
+input_ids = encoded["input_ids"].to(DEVICE)
+attention_mask = encoded["attention_mask"].to(DEVICE)
+
+predicted_types = []
+
+for i in range(len(new_posts)):
+    predicted_mbtis = {}
+    for dim in dimensions:
+        model = trained_models[dim]
+        model.eval()
+        with torch.no_grad():
+            outputs = model(
+                input_ids=input_ids[i].unsqueeze(0),
+                attention_mask=attention_mask[i].unsqueeze(0)
+            )
+            pred = torch.argmax(outputs.logits, dim=-1).item()
+            predicted_mbtis[dim] = dim_map[dim][pred]
+
+    predicted_types.append("".join(predicted_mbtis[dim] for dim in dimensions))
+
+for post, mbti in zip(new_posts, predicted_types):
+    print(f"\nPost: {post}\nPredicted MBTI: {mbti}")
