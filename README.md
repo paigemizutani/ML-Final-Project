@@ -199,6 +199,7 @@ Predict the MBTI type for a sample post
  ```
 
  ## Our Evaluation Graphs
+ <img src="pr_curve_EI.png" alt="drawing" width="200"/>
  ![E/I](pr_curve_EI.png "Precision-Recall Curve for E/I")
  ![S/N](pr_curve_SN.png "Precision-Recall Curve for S/N")
  ![T/F](pr_curve_TF.png "Precision-Recall Curve for T/F")
