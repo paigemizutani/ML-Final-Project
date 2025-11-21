@@ -197,6 +197,12 @@ Predict the MBTI type for a sample post
   Post: Wait Im actually so excited for thiss
   Predicted MBTI: ISFP
  ```
+
+ ## Our Evaluation Graphs
+ ![E/I](pr_curve_EI.png "Precision-Recall Curve for E/I")
+ ![S/N](pr_curve_SN.png "Precision-Recall Curve for S/N")
+ ![T/F](pr_curve_TF.png "Precision-Recall Curve for T/F")
+ ![J/P](pr_curve_JP.png "Precision-Recall Curve for J/P")
  
  ## Potential Improvements
 
