@@ -136,6 +136,68 @@ Train four BERT classifiers (one per MBTI dimension)
 Evaluate each model
 Predict the MBTI type for a sample post
 
+ ## Our Output
+ ```
+  Training model for E_I...
+  Some weights of BertForSequenceClassification were not initialized from the model checkpoint at prajjwal1/bert-tiny and are newly initialized: ['classifier.bias', 'classifier.weight']
+  You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+  Epoch 1 done, Loss: 0.6925
+  Epoch 2 done, Loss: 0.7044
+  Epoch 3 done, Loss: 0.7487
+  
+  Evaluating model...
+  Accuracy: 0.5986
+  PR AUC:  0.1944
+  
+  Training model for S_N...
+  Some weights of BertForSequenceClassification were not initialized from the model checkpoint at prajjwal1/bert-tiny and are newly initialized: ['classifier.bias', 'classifier.weight']
+  You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+  Epoch 1 done, Loss: 0.5469
+  Epoch 2 done, Loss: 0.3736
+  Epoch 3 done, Loss: 0.5740
+  
+  Evaluating model...
+  Accuracy: 0.5764
+  PR AUC:  0.9330
+  
+  Training model for T_F...
+  Some weights of BertForSequenceClassification were not initialized from the model checkpoint at prajjwal1/bert-tiny and are newly initialized: ['classifier.bias', 'classifier.weight']
+  You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+  Epoch 1 done, Loss: 0.6766
+  Epoch 2 done, Loss: 0.6377
+  Epoch 3 done, Loss: 0.6287
+  
+  Evaluating model...
+  Accuracy: 0.5529
+  PR AUC:  0.5233
+  
+  Training model for J_P...
+  Some weights of BertForSequenceClassification were not initialized from the model checkpoint at prajjwal1/bert-tiny and are newly initialized: ['classifier.bias', 'classifier.weight']
+  You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+  Epoch 1 done, Loss: 0.6997
+  Epoch 2 done, Loss: 0.7109
+  Epoch 3 done, Loss: 0.6770
+  
+  Evaluating model...
+  Accuracy: 0.5429
+  PR AUC:  0.6491
+  
+  Post: Ok ya not sure if this model is actually predicting anything
+  Predicted MBTI: ISTP
+  
+  Post: I love leading teams and planning long-term goals.
+  Predicted MBTI: ENTP
+  
+  Post: I really enjoy spending time alone thinking about ideas.
+  Predicted MBTI: ISTJ
+  
+  Post: whatever this is sooo annoying
+  Predicted MBTI: INTP
+  
+  Post: Wait Im actually so excited for thiss
+  Predicted MBTI: ISFP
+ ```
+ 
  ## Potential Improvements
 
 1. **Larger Models** – `bert-base` for better performance  
