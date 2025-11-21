@@ -199,25 +199,21 @@ Predict the MBTI type for a sample post
  ```
 
  ## Our Evaluation Graphs
-<figure>
-  <img src="pr_curve_EI.png" alt="E/I PR Curve" width="600"/>
-  <figcaption><b>Figure 1:</b> E/I Precision-Recall Curve</figcaption>
-</figure>
+<img src="pr_curve_EI.png" alt="E/I PR Curve" width="600"/>
 
-<figure>
-  <img src="pr_curve_SN.png" alt="S/N PR Curve" width="600"/>
-  <figcaption><b>Figure 2:</b> S/N Precision-Recall Curve</figcaption>
-</figure>
+**Figure 1:** E/I Precision-Recall Curve
 
-<figure>
-  <img src="pr_curve_TF.png" alt="T/F PR Curve" width="600"/>
-  <figcaption><b>Figure 3:</b> T/F Precision-Recall Curve</figcaption>
-</figure>
+<img src="pr_curve_SN.png" alt="S/N PR Curve" width="600"/>
 
-<figure>
-  <img src="pr_curve_JP.png" alt="J/P PR Curve" width="600"/>
-  <figcaption><b>Figure 4:</b> J/P Precision-Recall Curve</figcaption>
-</figure>
+**Figure 2:** S/N Precision-Recall Curve
+
+<img src="pr_curve_TF.png" alt="T/F PR Curve" width="600"/>
+
+**Figure 3:** T/F Precision-Recall Curve
+
+<img src="pr_curve_JP.png" alt="J/P PR Curve" width="600"/>
+
+**Figure 4:** J/P Precision-Recall Curve
 
 
  
