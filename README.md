@@ -128,7 +128,7 @@ DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
 
 ```
-python mbti_classifier.py
+python model.py
 
 ```
 Load and preprocess the dataset
