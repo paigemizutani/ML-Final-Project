@@ -30,7 +30,7 @@ As Reddit posts and texts contain nuanced language, BERT captures semantic relat
 
 ## Dataset Requirements
 
-- File: `data/reddit_post.csv`  --> from Kaggle
+- File: `data/reddit_post.csv`  --> from Kaggle: https://www.kaggle.com/datasets/minhaozhang1/reddit-mbti-dataset
 - Required columns:
   - `mbti` – MBTI type (e.g., INTJ, ENFP)  
   - `body` – Reddit post text  
