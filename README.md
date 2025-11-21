@@ -222,8 +222,7 @@ Predict the MBTI type for a sample post
 1. **Larger Models** – `bert-base` for better performance  
 2. **More Data** – Train on the full dataset  
 3. **Hyperparameter Tuning** – Optimize learning rate, batch size, and epochs  
-4. **Additional Metrics** – F1-score, precision, recall
-5. 
+4. **Additional Metrics** – F1-score
 ---
 
 ## Summary
