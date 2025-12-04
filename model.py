@@ -9,7 +9,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import accuracy_score, precision_recall_curve, average_precision_score
 
-NUM_EPOCHS = 3
+NUM_EPOCHS = 5
 MAX_LEN = 128
 BATCH_SIZE = 16
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
@@ -19,7 +19,7 @@ MODEL_NAME = "prajjwal1/bert-tiny"
 df = pd.read_csv("data/reddit_post.csv")
 df = df[['mbti', 'body']].dropna().astype(str)
 
-df = df.sample(n=7000, random_state=42)
+df = df.sample(n=50000, random_state=42)
 
 
 # CREATE MBTI DIMENSIONS
