@@ -189,3 +189,7 @@ for i in range(len(new_posts)):
 
 for post, mbti in zip(new_posts, predicted_types):
     print(f"\nPost: {post}\nPredicted MBTI: {mbti}")
+
+
+from torch.optim.lr_scheduler import ReduceLROnPlateau
+
