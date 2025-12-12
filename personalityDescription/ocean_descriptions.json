@@ -1,0 +1,52 @@
+{
+  "O": {
+    "trait": "Openness to Experience",
+    "description": "Openness reflects imagination, curiosity, appreciation for art, emotional depth, and willingness to try new or unconventional ideas. High scorers tend to be creative, intellectually curious, and comfortable with abstract thinking. Low scorers prefer routine, familiarity, and traditional values.",
+    "sample_items": [
+      "I have a vivid imagination.",
+      "I enjoy exploring new ideas.",
+      "I am curious about many different things.",
+      "I have difficulty understanding abstract ideas. (reversed)"
+    ]
+  },
+  "C": {
+    "trait": "Conscientiousness",
+    "description": "Conscientiousness reflects organization, responsibility, discipline, and reliability. High scorers tend to plan ahead, follow rules, and work hard to achieve goals. Low scorers are more spontaneous, flexible, and may struggle with organization or follow-through.",
+    "sample_items": [
+      "I follow a schedule.",
+      "I pay attention to details.",
+      "I get chores done right away.",
+      "I leave my belongings around. (reversed)"
+    ]
+  },
+  "E": {
+    "trait": "Extraversion",
+    "description": "Extraversion reflects sociability, energy, assertiveness, and desire for stimulation. High scorers enjoy social interaction and seek excitement. Low scorers (introverts) prefer solitude, calm environments, and deep one-on-one interactions.",
+    "sample_items": [
+      "I am the life of the party.",
+      "I feel comfortable around people.",
+      "I start conversations.",
+      "I keep in the background. (reversed)"
+    ]
+  },
+  "A": {
+    "trait": "Agreeableness",
+    "description": "Agreeableness reflects compassion, cooperation, and concern for others. High scorers are empathetic, trustworthy, and eager to maintain harmony. Low scorers can be skeptical, competitive, or more self-interested.",
+    "sample_items": [
+      "I sympathize with others' feelings.",
+      "I take time out for others.",
+      "I feel others' emotions.",
+      "I insult people. (reversed)"
+    ]
+  },
+  "N": {
+    "trait": "Neuroticism",
+    "description": "Neuroticism reflects emotional sensitivity, tendency toward anxiety, mood swings, and reactivity to stress. High scorers experience negative emotions more intensely. Low scorers (emotionally stable) remain calm, resilient, and less reactive.",
+    "sample_items": [
+      "I get stressed out easily.",
+      "I worry about many things.",
+      "I become overwhelmed by emotions.",
+      "I remain calm under pressure. (reversed)"
+    ]
+  }
+}
