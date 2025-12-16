@@ -263,6 +263,8 @@ Predict the MBTI type for a sample post
 1. Clone this repository:
    ```
    git clone git@github.com:paigemizutani/ML-Final-Project.git
+   ```
+   ```
    cd ML-Final-Project
    ```
 2. Install the required libraries:
@@ -270,7 +272,14 @@ Predict the MBTI type for a sample post
    pip install torch transformers datasets pandas numpy scikit-learn matplotlib seaborn scipy tqdm
    ```
 3. Prepare the Datasets
-
+   MBTI
+   - The balanced MBTI datasets used in our experiments is already included in the repository as preprocessed CSV files under data/balanced.
+   - These files were generated during development and are provided to allow direct replication of results without rerunning data_setup.py.
+   - To reproduce our results, no additional MBTI data setup is required.
+   Big Five
+   - The Pandora-Big5 Reddit dataset is loaded automatically using the Hugging Face datasets library in our script.
+   - All preprocessing, sampling (150k posts), and train/validation/test splitting are handled within big5_model.py.
+   - No manual dataset download or preparation is required.
  
  ## Future Directions
 
