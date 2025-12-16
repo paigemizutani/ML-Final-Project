@@ -268,12 +268,7 @@ Future work could improve generalization by training on more diverse text source
 
 ## Contributions
 
-This project demonstrates machine learning pipeline for predicting MBTI personality types from text data using transformer-based models:
-
-- **Fine-tuning BERT**: Adapting a pretrained language model to a specific task 
-- **Decomposing a multi-class problem into binary tasks**: Instead of predicting all 16 MBTI types at once, the problem is split into four independent binary classification tasks corresponding to each MBTI dimension (E/I, S/N, T/F, J/P) to improve training stability and interpretability  
-- **Transformer-based personality prediction**: Utilizes contextualized embeddings from BERT to capture semantic nuances in text data and improving classification performance compared to traditional methods
-- **Potential for extension**: We plan to apply our current models to train and learn for other personality trait tests such as OCEAN
+- **Estimated time spent**: 40 hours
 
 
 
