@@ -298,6 +298,7 @@ Both models support inference on new, raw text inputs. To input your own text ed
   python big5_model.py
   ```
   Each script trains a BERT-based model, evaluates performance on the test set, and outputs relevant metrics and visualizations.
+ 
   Note: We trained our models using Colgate University's super computer, and even with GPU acceleration, full training runs takes a couple hours.
 
  
