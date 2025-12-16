@@ -310,7 +310,9 @@ Future work could improve generalization by training on more diverse text source
 
 ## Contributions
 
-This project was completed collaboratively, with both group members working together on all stages of the project, including dataset selection, model development, training, evaluation, visualization, analysis, and poster preparation. Work sessions were conducted jointly, and responsibilities were shared throughout.
+This project was completed collaboratively, with both group members working together on all stages of the project, including dataset selection, model development, training, evaluation, analysis, and poster preparation. Work sessions were conducted jointly, and responsibilities were shared throughout.
+
+The only division of work occurred during visualization: Paige created the plots and figures for the MBTI model results, while Ashley created the plots and figures for the Big Five model results.
 - **Total estimated time**: 40 hours
 
 
