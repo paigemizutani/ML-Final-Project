@@ -179,13 +179,19 @@ for i, dim in enumerate(dimensions):
 
 # PREDICT NEW POSTS FOR GIVEN RAW TEXT
 new_posts = [
-    "Ok ya not sure if this model is actually predicting anything",
-    "I love leading teams and planning long-term goals.",
-    "I really enjoy spending time alone thinking about ideas.",
-    "whatever this is sooo annoying",
-    "Wait Im actually so excited for thiss",
-    "I love spending time with strangers",
-    "Yes I completely agree with you! That is a great first step to take to be successful in the computer science department, please let me know if you need more help!"
+     "Yes I completely agree with you! That is a great first step to take to be successful in the computer science department, please let me know if you need more help!",
+    "I don’t think that approach will work. We need to be more logical and stick to the data.",
+    "Wow, that’s such a cool idea! I never thought of it that way before.",
+    "I’ve made a detailed plan for the project timeline. Everyone, please review it carefully.",
+    "Honestly, I just go with my gut on things. Planning too much stresses me out.",
+    "That’s really insightful. I think there’s a bigger pattern here if we look closely.",
+    "I love brainstorming all the possibilities. No idea is too wild.",
+    "Please make sure to follow the instructions exactly. Precision matters.",
+    "I prefer to work alone on this task. Group work slows me down.",
+    "Honestly, I don’t care about the rules as long as we have fun doing it.",
+    "I’ve noticed a trend in the data that might help us predict outcomes more accurately.",
+    "We should just try everything and see what works best."
+
 ]
 
 encoded = tokenizer(
