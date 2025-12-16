@@ -261,14 +261,14 @@ Predict the MBTI type for a sample post
 ## Replication Instructions
 
 **1. Clone this repository:**
-   ```
+   ```python
    git clone git@github.com:paigemizutani/ML-Final-Project.git
    ```
-   ```
+   ```python
    cd ML-Final-Project
    ```
 **2. Install the required libraries:**
-   ```
+   ```python
    pip install torch transformers datasets pandas numpy scikit-learn matplotlib seaborn scipy tqdm
    ```
 **3. Prepare the Datasets**
@@ -279,15 +279,27 @@ Predict the MBTI type for a sample post
    - To reproduce our results, no additional MBTI data setup is required.
 
    **Big Five**
-   - The Pandora-Big5 Reddit dataset is loaded automatically using the Hugging Face `datasets` library in our script.
-   - All preprocessing, sampling (150k posts), and train/validation/test splitting are handled within `big5_model.py`.
-   - No manual dataset download or preparation is required.
+   - For the Big Five model, dataset preparation is handled automatically within the training script.
+   - The code downloads and processes the Pandora-Big5 Reddit dataset from Hugging Face and creates the required train/validation/test splits at runtime.
+   - No manual data preparation is required.
 
-**4. Run Training and Evaluation**
+**4. For Generating Predictions on New Text**
+
+Both models support inference on new, raw text inputs. To input your own text edit the `new_posts` lists in `mbti_model.py` and `big5_model.py`.
+
+**5. Run Training and Evaluation**
+
   Train and evaluate the MBTI model:
-  ```bash
-    python mbti_model.py
+  ```python
+  python mbti_model.py
   ```
+  Train and evaluate the Big Five model:
+  ```python
+  python big5_model.py
+  ```
+  Each script trains a BERT-based model, evaluates performance on the test set, and outputs relevant metrics and visualizations.
+  Note: We trained our models using Colgate University's super computer, and even with GPU acceleration, full training runs takes a couple hours.
+
  
  ## Future Directions
 
