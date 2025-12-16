@@ -31,7 +31,11 @@ As Reddit posts and texts contain nuanced language, BERT captures semantic relat
   - `mbti` – MBTI type (e.g., INTJ, ENFP)  
   - `body` – Reddit post text  
 - **Preprocessing & Encoding:**  
-  - Balanced across all 16 MBTI personality types to mitigate class imbalance  
+  - Balanced across all 16 MBTI personality types to mitigate class imbalance
+      - `data/balanced/balanced_data.csv`
+      - `data/balanced/test_balanced.csv`
+      - `data/balanced/train_balanced.csv`
+      - `data/balanced/val_balanced.csv`
   - Converted 16-class MBTI labels into **four independent binary labels**: E/I, S/N, T/F, J/P  
 - **Data Split:**  
   - 70% training  
