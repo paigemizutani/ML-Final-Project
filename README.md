@@ -3,7 +3,9 @@ Personality Type Predictor
 
 # ML-Final-Project
 
-Our project aims to predict a Reddit user's **MBTI personality type** from their posts using **BERT-based models** where we split MBTI prediction into four binary classification tasks for simpler training and modular evaluation
+This project investigates to what extent personality traits can be inferred from short-form online text using machine learning, and how predictive performance differs between categorical personality frameworks (MBTI) and continuous trait frameworks (Big Five / OCEAN). Using Reddit posts as naturalistic text data, we fine-tune ***BERT-based models*** to predict personality dimensions directly from language.
+
+Our results show that personality prediction consistently exceeds chance, confirming that online language contains weak but detectable personality signals. Performance is stronger for MBTI, where stable categorical boundaries simplify prediction, while Big Five regression proves more challenging due to its continuous nature and the noise inherent in short, informal posts. Overall, pretrained transformers reliably extract psychologically meaningful cues from social media text.
 
 ---
 
@@ -30,16 +32,91 @@ As Reddit posts and texts contain nuanced language, BERT captures semantic relat
 
 ## Dataset Requirements
 
-- File: `data/reddit_post.csv`  --> from Kaggle: https://www.kaggle.com/datasets/minhaozhang1/reddit-mbti-dataset
-- Required columns:
+### MBTI Dataset (Reddit)
+
+- **File:** `data/reddit_post.csv`  
+- **Source:** Kaggle Reddit MBTI Dataset  
+  https://www.kaggle.com/datasets/minhaozhang1/reddit-mbti-dataset  
+- **Required Columns:**  
   - `mbti` – MBTI type (e.g., INTJ, ENFP)  
   - `body` – Reddit post text  
+- **Preprocessing & Encoding:**  
+  - Balanced across all 16 MBTI personality types to mitigate class imbalance  
+  - Converted 16-class MBTI labels into **four independent binary labels**: E/I, S/N, T/F, J/P  
+- **Data Split:**  
+  - 70% training  
+  - 10% validation  
+  - 20% test  
+
+---
+
+### Big Five (OCEAN) Dataset (Reddit)
+
+- **Files:** `big5_train.csv`, `big5_validation.csv`, `big5_test.csv`  
+- **Source:** Pandora-Big5 Reddit Dataset (Hugging Face)  
+  https://huggingface.co/datasets/jingjietan/pandora-big5  
+- **Required Columns:**  
+  - `text` – Reddit post text  
+  - `O` – Openness score (continuous)  
+  - `C` – Conscientiousness score (continuous)  
+  - `E` – Extraversion score (continuous)  
+  - `A` – Agreeableness score (continuous)  
+  - `N` – Neuroticism score (continuous)  
+- **Preprocessing:**  
+  - Sampled ~150,000 posts for computational feasibility  
+  - Scores normalized using `MinMaxScaler`  
+- **Data Split:**  
+  - 70% training  
+  - 10% validation  
+  - 20% test  
+ 
+
+### MBTI (Myers–Briggs Type Indicator)
+
+- **Source:** Kaggle Reddit MBTI Dataset (~368,000 posts)  
+- **Text:** User-generated Reddit posts  
+- **Labels:** Four binary personality dimensions  
+  - **Extraversion / Introversion (E/I)**  
+  - **Sensing / Intuition (S/N)**  
+  - **Thinking / Feeling (T/F)**  
+  - **Judging / Perceiving (J/P)**  
+- **Preprocessing:**  
+  - The dataset was **balanced across all 16 MBTI personality types** to mitigate majority-class bias.  
+  - Each post was converted from a 16-class MBTI label into **four independent binary labels**, one per personality dimension.  
+- **Data Split:**  
+  - 70% training  
+  - 10% validation  
+  - 20% test  
+
+This formulation reframes MBTI prediction as **four parallel binary classification tasks**, improving training stability, interpretability, and per-dimension evaluation.
+
+---
+### Big Five (OCEAN)
+
+- **Source:** Pandora-Big5 Reddit Dataset (Hugging Face)  
+- **Text:** User-generated Reddit posts  
+- **Labels:** Continuous personality trait scores  
+  - **Openness (O)**  
+  - **Conscientiousness (C)**  
+  - **Extraversion (E)**  
+  - **Agreeableness (A)**  
+  - **Neuroticism (N)**  
+- **Preprocessing:**  
+  - Approximately **150,000 posts** were sampled to ensure computational feasibility.  
+  - Trait scores were treated as **continuous regression targets** and normalized prior to training.  
+- **Data Split:**  
+  - 70% training  
+  - 10% validation  
+  - 20% test  
+
+This dataset enables direct comparison between **categorical personality prediction (MBTI)** and **continuous trait regression (Big Five)** using the same underlying pretrained language model.
+
 ---
 
 ## MBTI Dimension Encoding
 
 | Dimension | Encoding |
-|-----------|---------|
+|-----------|----------|
 | E/I       | I → 0, E → 1 |
 | S/N       | S → 0, N → 1 |
 | T/F       | T → 0, F → 1 |
