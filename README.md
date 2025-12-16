@@ -214,7 +214,56 @@ Both models support inference on new, raw text inputs. To input your own text ed
  
   Note: We trained our models using Colgate University's super computer, and even with GPU acceleration, full training runs takes a couple hours.
 
- 
+
+
+## Further Analysis
+
+Tables presents a comprehensive comparison of the 4-word phrases that appear most often in the dataset, based on a one-time data extraction, to support MBTI-related analysis by identifying recurring language patterns and expressions.
+
+### E vs I
+
+| Type     | Examples  |
+|---------|------------------|
+| Overlap | "at the end of the", "the end of the day", "there are a lot of", "has nothing to do with", "when i was a kid", "i think a lot of" |
+| E-specific phrases | "john madden john madden john", "madden john madden john madden", "cnn is fake news cnn" |
+| I-specific phrases | "thank you so much for", "i have no idea what", "i have a lot of", "this is one of the" |
+
+---
+
+### S vs N
+
+| Type     | Examples  |
+|---------|------------------|
+| Overlap | "at the end of the", "the end of the day", "there are a lot of", "has nothing to do with", "in the middle of the", "if you dont want to" |
+| S-specific phrases | "john madden john madden john", "madden john madden john madden", "cnn is fake news cnn" |
+| N-specific phrases | "thank you so much for", "as far as i know", "i think it would be", "i dont know what to" |
+
+---
+
+### T vs F
+
+| Type     | Examples  |
+|---------|------------------|
+| Overlap | "at the end of the", "has nothing to do with", "the end of the day", "there are a lot of", "in the middle of the" |
+| T-specific phrases | "you should be able to", "i think it would be" |
+| F-specific phrases | "thank you so much for", "im not the only one", "i dont know if i" |
+
+---
+
+### J vs P
+
+| Type     | Examples  |
+|---------|------------------|
+| Overlap | "at the end of the", "the end of the day", "there are a lot of", "has nothing to do with", "in the middle of the" |
+| J-specific phrases | "cnn is fake news cnn", "i think a lot of", "this is one of the" |
+| P-specific phrases | "john madden john madden john", "madden john madden john madden", "as far as i can", "request ign illu deposited level" |
+
+
+<img src="pr_curve_J_P (1).png" alt="J/P PR Curve" width="600"/>
+
+**Figure 4:** J/P Precision-Recall Curve
+
+
  ## Future Directions
 
 Future work could improve generalization by training on more diverse text sources beyond Reddit, such as blogs, essays, or social media platforms with longer-form content. Additionally, cross-framework analysis could explore correlations between MBTI dimensions and Big Five traits to identify shared linguistic signals and better understand how categorical and continuous personality models relate. Finally, incorporating demographic metadata (e.g., age groups or online communities) could help determine whether personality cues are expressed differently across populations.
