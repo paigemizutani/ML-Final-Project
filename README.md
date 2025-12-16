@@ -144,19 +144,19 @@ N: Accuracy=0.1049 | PR AUC=0.1039
 
  **MBTI:**
  
-<img src="pr_curve_E_I(1).png" alt="E/I PR Curve" width="600"/>
+<img src="pr_curve_E_I (1).png" alt="E/I PR Curve" width="600"/>
 
 **Figure 1:** E/I Precision-Recall Curve
 
-<img src="pr_curve_S_N(1).png" alt="S/N PR Curve" width="600"/>
+<img src="pr_curve_S_N (1).png" alt="S/N PR Curve" width="600"/>
 
 **Figure 2:** S/N Precision-Recall Curve
 
-<img src="pr_curve_T_F(1).png" alt="T/F PR Curve" width="600"/>
+<img src="pr_curve_T_F (1).png" alt="T/F PR Curve" width="600"/>
 
 **Figure 3:** T/F Precision-Recall Curve
 
-<img src="pr_curve_J_P(1).png" alt="J/P PR Curve" width="600"/>
+<img src="pr_curve_J_P (1).png" alt="J/P PR Curve" width="600"/>
 
 **Figure 4:** J/P Precision-Recall Curve
 
