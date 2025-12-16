@@ -263,6 +263,7 @@ Predict the MBTI type for a sample post
 
 **Big Five:**
 
+**ADD THE GRAPHS OUR FINAL MODEL WILL OUTPUT**
 
 ## Replication Instructions
 
