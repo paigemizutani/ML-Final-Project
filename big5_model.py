@@ -17,9 +17,7 @@ from sklearn.preprocessing import label_binarize
 
 import seaborn as sns
 
-# -------------------------
-# LOAD & SAMPLE DATA
-# -------------------------
+
 dataset = load_dataset("jingjietan/pandora-big5")
 dimensions = ['O', 'C', 'E', 'A', 'N']
 
@@ -39,7 +37,7 @@ for split in ["train", "validation", "test"]:
 
 # -------------------------
 # CONFIG
-# -------------------------
+
 NUM_EPOCHS = 10
 MAX_LEN = 128
 BATCH_SIZE = 20
@@ -48,9 +46,12 @@ MODEL_NAME = "bert-base-uncased"
 PATIENCE_ES = 2
 LR = 4e-5  
 
-# -------------------------
-# LOAD DATA
-# -------------------------
+#----------------
+
+
+
+
+
 train_df = pd.read_csv("big5_train.csv")
 val_df   = pd.read_csv("big5_validation.csv")
 test_df  = pd.read_csv("big5_test.csv")
@@ -60,17 +61,12 @@ for dim in dimensions:
     val_df[dim]   = val_df[dim].astype(float)
     test_df[dim]  = test_df[dim].astype(float)
 
-# -------------------------
-# NORMALIZE TARGETS
-# -------------------------
+
 scaler = MinMaxScaler()
 train_df[dimensions] = scaler.fit_transform(train_df[dimensions])
 val_df[dimensions]   = scaler.transform(val_df[dimensions])
 test_df[dimensions]  = scaler.transform(test_df[dimensions])
 
-# -------------------------
-# TOKENIZER
-# -------------------------
 tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 def encode(texts):
     texts = texts.astype(str)
@@ -81,9 +77,7 @@ train_enc = encode(train_df['text'])
 val_enc   = encode(val_df['text'])
 test_enc  = encode(test_df['text'])
 
-# -------------------------
-# DATASETS & LOADERS
-# -------------------------
+
 train_dataset = TensorDataset(
     train_enc['input_ids'], train_enc['attention_mask'],
     torch.tensor(train_df[dimensions].values, dtype=torch.float)
@@ -101,9 +95,13 @@ train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True)
 val_loader   = DataLoader(val_dataset, batch_size=BATCH_SIZE)
 test_loader  = DataLoader(test_dataset, batch_size=BATCH_SIZE)
 
-# -------------------------
+
+
+
+
+
 # MODEL
-# -------------------------
+
 class PsychBERT_Regressor(nn.Module):
     def __init__(self, model_name, num_labels=5):
         super().__init__()
@@ -126,9 +124,7 @@ optimizer = AdamW(model.parameters(), lr=LR)
 loss_fn = nn.SmoothL1Loss()
 scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=1, verbose=True)
 
-# -------------------------
-# TRAINING LOOP
-# -------------------------
+#TRAIN
 best_val_loss = float("inf")
 epochs_no_improve = 0
 train_losses, val_losses, val_r2s = [], [], []
@@ -180,15 +176,11 @@ for epoch in range(NUM_EPOCHS):
             print("Early stopping triggered.")
             break
 
-# -------------------------
-# LOAD BEST MODEL
-# -------------------------
+
 model.load_state_dict(torch.load("best_psychbert_big5.pt"))
 model.eval()
 
-# -------------------------
-# TEST EVALUATION
-# -------------------------
+
 all_true, all_pred = [], []
 with torch.no_grad():
     for input_ids, attention_mask, labels in test_loader:
@@ -200,9 +192,7 @@ with torch.no_grad():
 y_true = scaler.inverse_transform(np.vstack(all_true))
 y_pred = scaler.inverse_transform(np.vstack(all_pred))
 
-# -------------------------
-# METRICS
-# -------------------------
+
 metrics = []
 print("\nBig Five Regression Metrics:")
 for i, dim in enumerate(dimensions):
@@ -216,86 +206,14 @@ metrics_df = pd.DataFrame(metrics, columns=['Trait','MSE','MAE','R2'])
 metrics_df.to_csv("big5_regression_metrics.csv", index=False)
 
 
-# -------------------------
-# SAFE BINNING (10 bins, 0-9)
-# -------------------------
-def bin_score_10_safe(x):
-    x = np.clip(x, 0, 100)
-    return min(int(x // 10), 9)
-
-binned_true = np.vectorize(bin_score_10_safe)(y_true)
-binned_pred = np.vectorize(bin_score_10_safe)(y_pred)
-
-bin_metrics = []
-for i, dim in enumerate(dimensions):
-    heatmap_df = pd.DataFrame(0, index=range(10), columns=range(10))
-    for t,p in zip(binned_true[:,i], binned_pred[:,i]):
-        heatmap_df.loc[t,p] += 1
-
-    plt.figure(figsize=(8,6))
-    sns.heatmap(heatmap_df, annot=True, fmt='d', cmap='YlGnBu')
-    plt.xlabel("Predicted Bin")
-    plt.ylabel("True Bin")
-    plt.title(f"{dim} - True vs Predicted (10x10 bins)")
-    plt.tight_layout()
-    plt.savefig(f"heatmap_{dim}.png")
-    plt.close()
-
-    mse_bin = mean_squared_error(binned_true[:, i], binned_pred[:, i])
-    mae_bin = mean_absolute_error(binned_true[:, i], binned_pred[:, i])
-    r2_bin  = r2_score(binned_true[:, i], binned_pred[:, i])
-    bin_metrics.append([dim, mse_bin, mae_bin, r2_bin])
-
-bin_metrics_df = pd.DataFrame(bin_metrics, columns=['Trait','MSE_bin','MAE_bin','R2_bin'])
-bin_metrics_df.to_csv("big5_regression_metrics_bins_10.csv", index=False)
 
 
 
 
 
 
+# PREDICTION INPUT
 
-# -------------------------
-# COMBINED HEATMAP FIGURE
-# -------------------------
-import matplotlib.pyplot as plt
-import seaborn as sns
-import pandas as pd
-import numpy as np
-
-# Create a 5x5 figure: 1 row, 5 columns
-fig, axes = plt.subplots(1, 5, figsize=(25,5))
-
-for i, dim in enumerate(dimensions):
-    # Create 10x10 bin counts
-    heatmap_df = pd.DataFrame(0, index=range(10), columns=range(10))
-    for t, p in zip(binned_true[:, i], binned_pred[:, i]):
-        heatmap_df.loc[t, p] += 1
-
-    ax = axes[i]
-    sns.heatmap(
-        heatmap_df,
-        annot=True,
-        fmt='d',
-        cmap='YlGnBu',
-        cbar=(i==4),  # only show colorbar on last subplot
-        ax=ax
-    )
-    ax.set_xlabel("Predicted Bin")
-    ax.set_ylabel("True Bin")
-    ax.set_title(dim)
-
-plt.suptitle("Predicted vs True Big Five Traits (10 Bins)", fontsize=18)
-plt.tight_layout(rect=[0, 0, 1, 0.95])  # leave space for suptitle
-plt.savefig("results_summary.png", dpi=300)
-plt.show()
-
-
-
-
-# -------------------------
-# Predict new posts
-# -------------------------
 def predict_new_posts(texts):
     enc = tokenizer(
         [str(t) for t in texts],
@@ -353,17 +271,105 @@ for post, p in zip(new_posts, new_preds.values):
 
 
 
-# =========================================================
-# OCEAN CLASSIFICATION-STYLE METRICS (MBTI-LIKE)
-# =========================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# GRAPHS & FIGURES
+
+def bin_score_10_safe(x):
+    x = np.clip(x, 0, 100)
+    return min(int(x // 10), 9)
+
+binned_true = np.vectorize(bin_score_10_safe)(y_true)
+binned_pred = np.vectorize(bin_score_10_safe)(y_pred)
+
+bin_metrics = []
+for i, dim in enumerate(dimensions):
+    heatmap_df = pd.DataFrame(0, index=range(10), columns=range(10))
+    for t,p in zip(binned_true[:,i], binned_pred[:,i]):
+        heatmap_df.loc[t,p] += 1
+
+    plt.figure(figsize=(8,6))
+    sns.heatmap(heatmap_df, annot=True, fmt='d', cmap='YlGnBu')
+    plt.xlabel("Predicted Bin")
+    plt.ylabel("True Bin")
+    plt.title(f"{dim} - True vs Predicted (10x10 bins)")
+    plt.tight_layout()
+    plt.savefig(f"heatmap_{dim}.png")
+    plt.close()
+
+    mse_bin = mean_squared_error(binned_true[:, i], binned_pred[:, i])
+    mae_bin = mean_absolute_error(binned_true[:, i], binned_pred[:, i])
+    r2_bin  = r2_score(binned_true[:, i], binned_pred[:, i])
+    bin_metrics.append([dim, mse_bin, mae_bin, r2_bin])
+
+bin_metrics_df = pd.DataFrame(bin_metrics, columns=['Trait','MSE_bin','MAE_bin','R2_bin'])
+bin_metrics_df.to_csv("big5_regression_metrics_bins_10.csv", index=False)
+
+
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
+import numpy as np
+
+# Create a 5x5 figure: 1 row, 5 columns
+fig, axes = plt.subplots(1, 5, figsize=(25,5))
+
+for i, dim in enumerate(dimensions):
+    # Create 10x10 bin counts
+    heatmap_df = pd.DataFrame(0, index=range(10), columns=range(10))
+    for t, p in zip(binned_true[:, i], binned_pred[:, i]):
+        heatmap_df.loc[t, p] += 1
+
+    ax = axes[i]
+    sns.heatmap(
+        heatmap_df,
+        annot=True,
+        fmt='d',
+        cmap='YlGnBu',
+        cbar=(i==4),  # only show colorbar on last subplot
+        ax=ax
+    )
+    ax.set_xlabel("Predicted Bin")
+    ax.set_ylabel("True Bin")
+    ax.set_title(dim)
+
+plt.suptitle("Predicted vs True Big Five Traits (10 Bins)", fontsize=18)
+plt.tight_layout(rect=[0, 0, 1, 0.95])  # leave space for suptitle
+plt.savefig("results_summary.png", dpi=300)
+plt.show()
+
+
+
 
 print("\n==============================")
 print("OCEAN ACCURACY & PR AUC SCORES")
 print("==============================")
 
-# ---------------------------------------------------------
-# RAW SCORES → BINARY (LOW / HIGH)
-# ---------------------------------------------------------
+
 print("\n--- RAW OCEAN (Binary: Low vs High) ---")
 
 raw_results = []
@@ -390,9 +396,6 @@ raw_acc_df = pd.DataFrame(
 )
 raw_acc_df.to_csv("big5_accuracy_raw.csv", index=False)
 
-# ---------------------------------------------------------
-# BINNED SCORES → 10-CLASS CLASSIFICATION
-# ---------------------------------------------------------
 print("\n--- BINNED OCEAN (10 Bins) ---")
 
 bin_results = []
@@ -426,15 +429,6 @@ bin_acc_df = pd.DataFrame(
 bin_acc_df.to_csv("big5_accuracy_binned.csv", index=False)
 
 
-
-
-
-
-
-
-# =========================================================
-# RESULTS FIGURE: OCEAN Accuracy & PR AUC
-# =========================================================
 
 # Load metric CSVs (already saved above)
 raw_df = pd.read_csv("big5_accuracy_raw.csv")
