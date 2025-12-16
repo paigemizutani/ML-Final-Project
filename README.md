@@ -282,6 +282,12 @@ Predict the MBTI type for a sample post
    - The Pandora-Big5 Reddit dataset is loaded automatically using the Hugging Face `datasets` library in our script.
    - All preprocessing, sampling (150k posts), and train/validation/test splitting are handled within `big5_model.py`.
    - No manual dataset download or preparation is required.
+
+**4. Run Training and Evaluation**
+  Train and evaluate the MBTI model:
+  ```bash
+    python mbti_model.py
+  ```
  
  ## Future Directions
 
