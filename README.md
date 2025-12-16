@@ -262,7 +262,7 @@ Predict the MBTI type for a sample post
 
 **1. Clone this repository:**
    ```
-   git clone git@github.com:paigemizutani/ML-Final-Project.git
+   git clone https://github.com/paigemizutani/ML-Final-Project.git
    ```
    ```
    cd ML-Final-Project
