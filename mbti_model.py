@@ -184,7 +184,8 @@ new_posts = [
     "I really enjoy spending time alone thinking about ideas.",
     "whatever this is sooo annoying",
     "Wait Im actually so excited for thiss",
-    "I love spending time with strangers"
+    "I love spending time with strangers",
+    "Yes I completely agree with you! That is a great first step to take to be successful in the computer science department, please let me know if you need more help!"
 ]
 
 encoded = tokenizer(
