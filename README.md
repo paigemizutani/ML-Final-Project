@@ -12,7 +12,55 @@ Our results show that personality prediction consistently exceeds chance, confir
 
  **MBTI:**
  ```
-
+ Epoch 1 | Train Loss: 0.6723 | Val Loss: 0.6622
+ Epoch 2 | Train Loss: 0.6444 | Val Loss: 0.6607
+ Epoch 3 | Train Loss: 0.6099 | Val Loss: 0.6745
+ Epoch 4 | Train Loss: 0.5665 | Val Loss: 0.7069
+ Early stopping triggered after 4 epochs.
+ 
+ E_I: Accuracy=0.5870, PR AUC=0.6467
+ 
+ S_N: Accuracy=0.5894, PR AUC=0.6315
+ 
+ T_F: Accuracy=0.6107, PR AUC=0.6741
+ 
+ J_P: Accuracy=0.5784, PR AUC=0.6291
+ 
+ Post: Yes I completely agree with you! That is a great first step to take to be successful in the computer science department, please let me know if you need more help!
+ Predicted MBTI: INFJ
+ 
+ Post: I don’t think that approach will work. We need to be more logical and stick to the data.
+ Predicted MBTI: ENTJ
+ 
+ Post: Wow, that’s such a cool idea! I never thought of it that way before.
+ Predicted MBTI: ISFJ
+ 
+ Post: I’ve made a detailed plan for the project timeline. Everyone, please review it carefully.
+ Predicted MBTI: ENFJ
+ 
+ Post: Honestly, I just go with my gut on things. Planning too much stresses me out.
+ Predicted MBTI: ISFP
+ 
+ Post: That’s really insightful. I think there’s a bigger pattern here if we look closely.
+ Predicted MBTI: ISFP
+ 
+ Post: I love brainstorming all the possibilities. No idea is too wild.
+ Predicted MBTI: INFJ
+ 
+ Post: Please make sure to follow the instructions exactly. Precision matters.
+ Predicted MBTI: INTJ
+ 
+ Post: I prefer to work alone on this task. Group work slows me down.
+ Predicted MBTI: ISTJ
+ 
+ Post: Honestly, I don’t care about the rules as long as we have fun doing it.
+ Predicted MBTI: ESFJ
+ 
+ Post: I’ve noticed a trend in the data that might help us predict outcomes more accurately.
+ Predicted MBTI: ENTJ
+ 
+ Post: We should just try everything and see what works best.
+ Predicted MBTI: INTJ
  ```
 
 **Big Five:**
