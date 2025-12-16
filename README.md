@@ -1,7 +1,6 @@
 # ML-Final-Project
-Predicting Personality from Text: MBTI vs. Big Five
 
-# Overview
+# Predicting Personality from Text: MBTI vs. Big Five
 
 This project investigates to what extent personality traits can be inferred from short-form online text using machine learning, and how predictive performance differs between categorical personality frameworks (MBTI) and continuous trait frameworks (Big Five / OCEAN). Using Reddit posts as naturalistic text data, we fine-tune ***BERT-based models*** to predict personality dimensions directly from language.
 
@@ -11,22 +10,13 @@ Our results show that personality prediction consistently exceeds chance, confir
 
 ## Project Description
 
-MBTI has four dimensions:
-
-- **E/I** – Extroversion / Introversion  
-- **S/N** – Sensing / Intuition  
-- **T/F** – Thinking / Feeling  
-- **J/P** – Judging / Perceiving  
-
-Instead of a 16-class classification problem, the task is split into **four independent binary classification tasks**, one per dimension to simplify training.
-
 **BERT (Bidirectional Encoder Representations from Transformers)** is a pretrained language model we chose to apply for our problem task. Key features of the model include:
 - **Bidirectional context**: Understands words based on left and right context
 - **Transformer-based**: Uses self-attention to capture long-range dependencies 
 - **Pretrained**: Learns general language patterns from large corpora 
 - **Fine-tunable**: Can be adapted for downstream tasks like classification
 
-As Reddit posts and texts contain nuanced language, BERT captures semantic relationships and context, making it ideal for personality prediction. For the inital milestone, we use `prajjwal1/bert-tiny` for fast experimentation and testing.
+As Reddit posts and texts contain nuanced language, BERT captures semantic relationships and context, making it ideal for personality prediction. For the final milestone, we use `bert-base-uncased` compared to `prajjwal1/bert-tiny` used during initial milestone to improve predictions and for large datasets.
 
 ---
 
@@ -46,7 +36,9 @@ As Reddit posts and texts contain nuanced language, BERT captures semantic relat
 - **Data Split:**  
   - 70% training  
   - 10% validation  
-  - 20% test  
+  - 20% test
+     
+This formulation reframes MBTI prediction as **four parallel binary classification tasks**, improving training stability, interpretability, and per-dimension evaluation.
 
 ---
 
@@ -64,84 +56,54 @@ As Reddit posts and texts contain nuanced language, BERT captures semantic relat
   - `N` – Neuroticism score (continuous)  
 - **Preprocessing:**  
   - Sampled ~150,000 posts for computational feasibility  
-  - Scores normalized using `MinMaxScaler`  
-- **Data Split:**  
-  - 70% training  
-  - 10% validation  
-  - 20% test  
- 
-
-### MBTI (Myers–Briggs Type Indicator)
-
-- **Source:** Kaggle Reddit MBTI Dataset (~368,000 posts)  
-- **Text:** User-generated Reddit posts  
-- **Labels:** Four binary personality dimensions  
-  - **Extraversion / Introversion (E/I)**  
-  - **Sensing / Intuition (S/N)**  
-  - **Thinking / Feeling (T/F)**  
-  - **Judging / Perceiving (J/P)**  
-- **Preprocessing:**  
-  - The dataset was **balanced across all 16 MBTI personality types** to mitigate majority-class bias.  
-  - Each post was converted from a 16-class MBTI label into **four independent binary labels**, one per personality dimension.  
+  - Trait scores were treated as **continuous regression targets** and normalized using `MinMaxScaler`  
 - **Data Split:**  
   - 70% training  
   - 10% validation  
   - 20% test  
 
-This formulation reframes MBTI prediction as **four parallel binary classification tasks**, improving training stability, interpretability, and per-dimension evaluation.
 
 ---
-### Big Five (OCEAN)
+## Model Architecture
 
-- **Source:** Pandora-Big5 Reddit Dataset (Hugging Face)  
-- **Text:** User-generated Reddit posts  
-- **Labels:** Continuous personality trait scores  
-  - **Openness (O)**  
-  - **Conscientiousness (C)**  
-  - **Extraversion (E)**  
-  - **Agreeableness (A)**  
-  - **Neuroticism (N)**  
-- **Preprocessing:**  
-  - Approximately **150,000 posts** were sampled to ensure computational feasibility.  
-  - Trait scores were treated as **continuous regression targets** and normalized prior to training.  
-- **Data Split:**  
-  - 70% training  
-  - 10% validation  
-  - 20% test  
-
-This dataset enables direct comparison between **categorical personality prediction (MBTI)** and **continuous trait regression (Big Five)** using the same underlying pretrained language model.
+Both models use **BERT (Devlin et al., 2019)** as a pretrained encoder to extract contextualized embeddings from Reddit posts.
 
 ---
 
-## MBTI Dimension Encoding
+### MBTI Model
 
-| Dimension | Encoding |
-|-----------|----------|
-| E/I       | I → 0, E → 1 |
-| S/N       | S → 0, N → 1 |
-| T/F       | T → 0, F → 1 |
-| J/P       | J → 0, P → 1 |
-
-Each dimension is treated as an independent binary classification task.
+- **Architecture:** `BertForSequenceClassification`  
+- **Task:** Multi-label classification  
+- **Outputs:** 4 logits corresponding to each MBTI dimension:  
+  - E/I, S/N, T/F, J/P  
+- **Loss Function:** Binary Cross-Entropy Loss with class weighting to address label imbalance  
+- **Evaluation Metrics:**  
+  - Accuracy per dimension  
+  - Precision–Recall AUC (PR AUC) per dimension  
 
 ---
 
-## Model
+### Big Five (OCEAN) Model
 
-- **Tokenizer**: `BertTokenizer`  
-- **Model**: `BertForSequenceClassification`
+- **Architecture:** BERT encoder + custom regression head  
+- **Task:** Multi-output regression  
+- **Outputs:** Continuous trait scores for:  
+  - Openness (O), Conscientiousness (C), Extraversion (E), Agreeableness (A), Neuroticism (N)  
+- **Loss Function:** Smooth L1 (Huber) Loss  
+- **Evaluation Metrics:**  
+  - Mean Squared Error (MSE) per trait  
+  - Mean Absolute Error (MAE) per trait  
+  - R² per trait  
+- **Optional Analysis:** Continuous predictions can be **binned** for precision–recall curve evaluation  
 
-Inputs:
-- `input_ids` – token indices  
-- `attention_mask` – mask for real tokens
-- 
-For each dimension:
+---
 
-1. Initialize a BERT classifier  
-2. Train for `NUM_EPOCHS` with AdamW optimizer
-3. Compute cross-entropy loss  
-4. Backpropagate and update weights  
-5. Evaluate accuracy on the test set
+### Common Training Setup
+
+- **Optimizer:** AdamW  
+- **Early Stopping:** Patience = 2 epochs  
+- **Learning Rate Scheduling:** ReduceLROnPlateau  
+
 
 Example code:
 
