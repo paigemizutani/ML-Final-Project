@@ -258,6 +258,17 @@ Predict the MBTI type for a sample post
 
 **Figure 4:** J/P Precision-Recall Curve
 
+## Replication Instructions
+**Environment Setup**
+1. Clone this repository:
+   ```
+   git clone <repo-url>
+   cd <repo-name>
+   ```
+2. Install dependencies:
+   ```
+   pip install 
+   ```
 
  
  ## Future Directions
