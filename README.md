@@ -262,13 +262,14 @@ Predict the MBTI type for a sample post
 **Environment Setup**
 1. Clone this repository:
    ```
-   git clone <repo-url>
-   cd <repo-name>
+   git clone git@github.com:paigemizutani/ML-Final-Project.git
+   cd ML-Final-Project
    ```
-2. Install dependencies:
+2. Install the required libraries:
    ```
-   pip install 
+   pip install torch transformers datasets pandas numpy scikit-learn matplotlib seaborn scipy tqdm
    ```
+3. Prepare the Datasets
 
  
  ## Future Directions
