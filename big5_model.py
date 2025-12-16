@@ -215,18 +215,6 @@ for i, dim in enumerate(dimensions):
 metrics_df = pd.DataFrame(metrics, columns=['Trait','MSE','MAE','R2'])
 metrics_df.to_csv("big5_regression_metrics.csv", index=False)
 
-# -------------------------
-# Scatter plots saved
-# -------------------------
-for i, dim in enumerate(dimensions):
-    plt.figure(figsize=(5,5))
-    plt.scatter(y_true[:,i], y_pred[:,i], alpha=0.5, color='teal', edgecolor='k', s=20)
-    plt.plot([0,100],[0,100],'r--', linewidth=2)
-    plt.title(f"{dim} (R²={metrics_df['R2'][i]:.2f})")
-    plt.xlabel("True"); plt.ylabel("Predicted")
-    plt.tight_layout()
-   # plt.savefig(f"scatter_{dim}.png")
-    plt.close()
 
 # -------------------------
 # SAFE BINNING (10 bins, 0-9)
@@ -261,32 +249,12 @@ for i, dim in enumerate(dimensions):
 bin_metrics_df = pd.DataFrame(bin_metrics, columns=['Trait','MSE_bin','MAE_bin','R2_bin'])
 bin_metrics_df.to_csv("big5_regression_metrics_bins_10.csv", index=False)
 
-# -------------------------
-# Distribution plots saved
-# -------------------------
-for i, dim in enumerate(dimensions):
-    plt.figure(figsize=(6,4))
-    sns.histplot(y_true[:,i], bins=10, color='skyblue', kde=False, alpha=0.6, label='True')
-    sns.histplot(y_pred[:,i], bins=10, color='salmon', kde=False, alpha=0.6, label='Predicted')
-    plt.title(f"{dim} Distribution")
-    plt.xlabel("Score"); plt.ylabel("Count"); plt.legend()
-    plt.tight_layout()
-   # plt.savefig(f"dist_{dim}.png")
-    plt.close()
-
-# -------------------------
-# Pairwise predicted traits saved
-# -------------------------
-sns.pairplot(pd.DataFrame(y_pred, columns=dimensions), kind='scatter', corner=True, plot_kws={'alpha':0.3, 's':20})
-plt.suptitle("Predicted OCEAN Trait Pairwise Plots", y=1.02)
-#plt.savefig("pairwise_pred.png")
-plt.close()
 
 
 
 
 
-'''
+
 # -------------------------
 # COMBINED HEATMAP FIGURE
 # -------------------------
@@ -321,7 +289,7 @@ plt.suptitle("Predicted vs True Big Five Traits (10 Bins)", fontsize=18)
 plt.tight_layout(rect=[0, 0, 1, 0.95])  # leave space for suptitle
 plt.savefig("results_summary.png", dpi=300)
 plt.show()
-'''
+
 
 
 
@@ -385,61 +353,6 @@ for post, p in zip(new_posts, new_preds.values):
 
 
 
-
-    # -------------------------
-# Training Accuracy / Loss Curve
-# -------------------------
-plt.figure(figsize=(8,5))
-epochs_range = range(1, len(train_losses)+1)
-
-# Plot train & validation loss
-plt.plot(epochs_range, train_losses, 'o-', color='teal', label='Train Loss')
-plt.plot(epochs_range, val_losses, 'o-', color='salmon', label='Validation Loss')
-
-# Plot validation R² on secondary axis
-ax2 = plt.gca().twinx()
-ax2.plot(epochs_range, val_r2s, 's--', color='purple', label='Validation R²')
-ax2.set_ylabel("R²", color='purple')
-ax2.tick_params(axis='y', labelcolor='purple')
-
-plt.title("Training / Validation Loss and Validation R² over Epochs")
-plt.xlabel("Epoch")
-plt.ylabel("Loss")
-plt.legend(loc='upper left')
-ax2.legend(loc='upper right')
-plt.tight_layout()
-plt.savefig("training_curve.png", dpi=300)
-plt.close()
-
-
-
-# -------------------------
-# Plot per-trait loss and R² over epochs
-# -------------------------
-'''plt.figure(figsize=(10,6))
-
-epochs = range(1, len(train_losses)+1)
-colors = ['C0','C1','C2','C3','C4']
-
-# Per-trait validation R² (we need to compute per-trait per epoch)
-# Assuming you have stored per-trait R²s per epoch in val_r2s_per_trait list of dicts
-# Example: val_r2s_per_trait[epoch_idx] = {'O':0.1,'C':0.2,...}
-
-# For demonstration, we compute a simple proxy: overall R² per epoch (replace with per-trait if available)
-for i, dim in enumerate(dimensions):
-    plt.plot(epochs, [v[i] for v in val_losses], label=f"{dim} Loss", color=colors[i], linewidth=2)
-
-plt.xlabel("Epoch")
-plt.ylabel("Validation Loss")
-plt.title("Validation Loss per Big Five Trait")
-plt.xticks(epochs)
-plt.legend()
-plt.grid(True)
-plt.tight_layout()
-plt.savefig("val_loss_per_trait.png", dpi=300)
-plt.close()
-
-'''
 # =========================================================
 # OCEAN CLASSIFICATION-STYLE METRICS (MBTI-LIKE)
 # =========================================================
