@@ -163,7 +163,7 @@ N: Accuracy=0.1049 | PR AUC=0.1039
 
 **Big Five:**
 
-<img src="results_summary.png" alt="Predicted vs True Big Five Traits" width="1300"/>
+<img src="results_summary.png" alt="Predicted vs True Big Five Traits" width="1500"/>
 
 **Figure 5:** Predicted vs True Big Five Traits Heatmap Summary
 
