@@ -163,11 +163,11 @@ N: Accuracy=0.1049 | PR AUC=0.1039
 
 **Big Five:**
 
-<img src="results_summary.png" alt="Predicted vs True Big Five Traits" width="1000"/>
+<img src="results_summary.png" alt="Predicted vs True Big Five Traits" width="1300"/>
 
 **Figure 5:** Predicted vs True Big Five Traits Heatmap Summary
 
-<img src="ocean_results_summary.png" alt="OCEAN Personality Prediction Performance" width="800"/>
+<img src="ocean_results_summary.png" alt="OCEAN Personality Prediction Performance" width="900"/>
 
 **Figure 6:** OCEAN Personality Prediction Performance Summary
 
