@@ -1,5 +1,5 @@
 # ML-Final-Project
-Personality Type Predictor
+Predicting Personality from Text: MBTI vs. Big Five
 
 # ML-Final-Project
 
