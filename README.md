@@ -98,7 +98,7 @@ Both models use **BERT (Devlin et al., 2019)** as a pretrained encoder to extrac
   - Mean Squared Error (MSE) per trait  
   - Mean Absolute Error (MAE) per trait  
   - R² per trait  
-- **Optional Analysis:** Continuous predictions can be **binned** for precision–recall curve evaluation  
+- **Optional Analysis:** Continuous predictions were **binned** for precision–recall curve evaluation  
 
 ---
 
