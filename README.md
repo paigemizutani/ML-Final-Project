@@ -61,7 +61,7 @@ Our results show that personality prediction consistently exceeds chance, confir
 
    **MBTI**
    - The balanced MBTI datasets used in our experiments is already included in the repository as preprocessed CSV files under `data/balanced`.
-   - These files were generated during development and are provided to allow direct replication of results without rerunning `data_setup.py`.
+   - These files were generated during development and are provided to allow direct replication of results without rerunning `mbti_data_setup.py`.
    - To reproduce our results, no additional MBTI data setup is required.
 
    **Big Five**
