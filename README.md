@@ -268,7 +268,8 @@ Future work could improve generalization by training on more diverse text source
 
 ## Contributions
 
-- **Estimated time spent**: 40 hours
+This project was completed collaboratively, with both group members working together on all stages of the project, including dataset selection, model development, training, evaluation, visualization, analysis, and poster preparation. Work sessions were conducted jointly, and responsibilities were shared throughout.
+- **Total estimated time**: 40 hours
 
 
 
