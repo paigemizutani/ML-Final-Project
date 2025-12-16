@@ -262,10 +262,8 @@ Predict the MBTI type for a sample post
  
  ## Future Directions
 
-1. **Larger Models** – `bert-base` for better performance  
-2. **More Data** – Train on the full dataset  
-3. **Hyperparameter Tuning** – Optimize learning rate, batch size, and epochs  
-4. **Additional Metrics** – F1-score
+Future work could improve generalization by training on more diverse text sources beyond Reddit, such as blogs, essays, or social media platforms with longer-form content. Additionally, cross-framework analysis could explore correlations between MBTI dimensions and Big Five traits to identify shared linguistic signals and better understand how categorical and continuous personality models relate. Finally, incorporating demographic metadata (e.g., age groups or online communities) could help determine whether personality cues are expressed differently across populations.
+
 ---
 
 ## Contributions
