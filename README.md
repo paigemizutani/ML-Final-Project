@@ -261,14 +261,14 @@ Predict the MBTI type for a sample post
 ## Replication Instructions
 
 **1. Clone this repository:**
-   ```python
+   ```
    git clone git@github.com:paigemizutani/ML-Final-Project.git
    ```
-   ```python
+   ```
    cd ML-Final-Project
    ```
 **2. Install the required libraries:**
-   ```python
+   ```
    pip install torch transformers datasets pandas numpy scikit-learn matplotlib seaborn scipy tqdm
    ```
 **3. Prepare the Datasets**
@@ -290,11 +290,11 @@ Both models support inference on new, raw text inputs. To input your own text ed
 **5. Run Training and Evaluation**
 
   Train and evaluate the MBTI model:
-  ```python
+  ```
   python mbti_model.py
   ```
   Train and evaluate the Big Five model:
-  ```python
+  ```
   python big5_model.py
   ```
   Each script trains a BERT-based model, evaluates performance on the test set, and outputs relevant metrics and visualizations.
