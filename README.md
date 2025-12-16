@@ -260,7 +260,7 @@ Predict the MBTI type for a sample post
 
 
  
- ## Potential Improvements
+ ## Future Directions
 
 1. **Larger Models** – `bert-base` for better performance  
 2. **More Data** – Train on the full dataset  
@@ -268,7 +268,7 @@ Predict the MBTI type for a sample post
 4. **Additional Metrics** – F1-score
 ---
 
-## Summary
+## Contributions
 
 This project demonstrates machine learning pipeline for predicting MBTI personality types from text data using transformer-based models:
 
