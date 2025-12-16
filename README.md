@@ -1,7 +1,7 @@
 # ML-Final-Project
 Predicting Personality from Text: MBTI vs. Big Five
 
-# ML-Final-Project
+# Overview
 
 This project investigates to what extent personality traits can be inferred from short-form online text using machine learning, and how predictive performance differs between categorical personality frameworks (MBTI) and continuous trait frameworks (Big Five / OCEAN). Using Reddit posts as naturalistic text data, we fine-tune ***BERT-based models*** to predict personality dimensions directly from language.
 
