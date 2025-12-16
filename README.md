@@ -160,6 +160,7 @@ N: Accuracy=0.1049 | PR AUC=0.1039
 
 **Figure 4:** J/P Precision-Recall Curve
 
+
 **Big Five:**
 
 <img src="results_summary.png" alt="Predicted vs True Big Five Traits" width="600"/>
