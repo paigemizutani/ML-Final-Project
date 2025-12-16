@@ -259,9 +259,12 @@ Tables presents a comprehensive comparison of the 4-word phrases that appear mos
 | P-specific phrases | "john madden john madden john", "madden john madden john madden", "as far as i can", "request ign illu deposited level" |
 
 
-<img src="pr_curve_J_P (1).png" alt="J/P PR Curve" width="600"/>
 
-**Figure 4:** J/P Precision-Recall Curve
+Heatmap shows the conditional probability of high OCEAN traits given predicted MBTI types, reflecting descriptive associations rather than causal mappings. Conscientiousness is uniformly high across types, suggesting limited variance or ceiling effects. Openness and Neuroticism vary more: intuitive–feeling types (ENFJ, ESFJ, ISFJ) show high Neuroticism, while thinking–intuitive types (INTJ, ENTJ) are low. Extraversion and Agreeableness are moderately high mainly in INFJ and ISFP, indicating partial alignment with MBTI social dimensions. Extreme values (0, 0.5, 1) hint at small sample sizes or thresholded traits, limiting fine-grained inference. Overall, some MBTI–OCEAN patterns appear, especially for Neuroticism and Openness, but MBTI types map weakly and inconsistently onto Big Five traits. Heatmap produced from predictions of 100 randomly created posts run on both MBTI and OCEAN models.
+
+<img src="mbti_ocean_heatmap.png" alt="mbti_ocean_heatmap" width="600"/>
+
+**Figure 4:** MBTI x OCEAN Heatmap
 
 
  ## Future Directions
